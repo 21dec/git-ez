@@ -13,27 +13,27 @@ g - simplified git wrapper
 Usage:
   g help [command]
 
-  g state [--short]
-  g diff
+Status:
+  g status [--long]
+  g diff [file]
 
-  g stage <file>
-  g stage --all
-  g unstage <file>
-  g unstage --all
-
+Commit:
   g commit [message]
   g amend [--no-edit]
 
+Undo/Move:
   g undo file <file>
   g undo commit
   g move <commit> [--keep]
 
+Branch:
   g branch list
   g branch new <name>
   g branch go <name>
   g branch del <name>
   g branch rename <old> <new>
 
+Remote:
   g fetch
   g pull
   g push
@@ -41,14 +41,13 @@ Usage:
   g init
   g clone <url> [dir]
 
+History:
   g log [--last N] [--graph] [--oneline] [file]
 USAGE
 }
 
-usage_state() { echo "Usage: g state [--short]"; }
-usage_diff() { echo "Usage: g diff"; }
-usage_stage() { echo "Usage: g stage <file> | g stage --all"; }
-usage_unstage() { echo "Usage: g unstage <file> | g unstage --all"; }
+usage_status() { echo "Usage: g status [--long]"; }
+usage_diff() { echo "Usage: g diff [file]"; }
 usage_commit() { echo "Usage: g commit [message]"; }
 usage_amend() { echo "Usage: g amend [--no-edit]"; }
 usage_undo() { echo "Usage: g undo file <file> | g undo commit"; }
@@ -78,10 +77,8 @@ case "$cmd" in
       exit 0
     fi
     case "$1" in
-      state) usage_state ;;
+      status) usage_status ;;
       diff) usage_diff ;;
-      stage) usage_stage ;;
-      unstage) usage_unstage ;;
       commit) usage_commit ;;
       amend) usage_amend ;;
       undo) usage_undo ;;
@@ -96,36 +93,22 @@ case "$cmd" in
     exit 0
     ;;
 
-  state)
-    if [[ $# -gt 1 ]]; then usage_state; exit 2; fi
-    if [[ "${1:-}" == "--short" ]]; then
-      git status -sb
-    else
+  status)
+    if [[ $# -gt 1 ]]; then usage_status; exit 2; fi
+    if [[ "${1:-}" == "--long" ]]; then
       git status
+    else
+      git status -sb
     fi
     ;;
 
   diff)
-    if [[ $# -ne 0 ]]; then usage_diff; exit 2; fi
-    git diff HEAD
-    ;;
-
-  stage)
-    if [[ "${1:-}" == "--all" ]]; then
-      git add -A
-      exit 0
+    if [[ $# -gt 1 ]]; then usage_diff; exit 2; fi
+    if [[ $# -eq 1 ]]; then
+      git diff HEAD -- "$1"
+    else
+      git diff HEAD
     fi
-    if [[ $# -eq 0 ]]; then usage_stage; exit 2; fi
-    git add -- "$@"
-    ;;
-
-  unstage)
-    if [[ "${1:-}" == "--all" ]]; then
-      git restore --staged -- .
-      exit 0
-    fi
-    if [[ $# -eq 0 ]]; then usage_unstage; exit 2; fi
-    git restore --staged -- "$@"
     ;;
 
   commit)
