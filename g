@@ -21,10 +21,10 @@ Commit:
   g commit [message]
   g amend [--no-edit]
 
-Undo/Move:
+Undo/Reset:
   g undo file <file>
   g undo commit
-  g move <commit> [--keep]
+  g reset <commit> [--keep]
 
 Branch:
   g branch list
@@ -51,7 +51,7 @@ usage_diff() { echo "Usage: g diff [file]"; }
 usage_commit() { echo "Usage: g commit [message]"; }
 usage_amend() { echo "Usage: g amend [--no-edit]"; }
 usage_undo() { echo "Usage: g undo file <file> | g undo commit"; }
-usage_move() { echo "Usage: g move <commit> [--keep]"; }
+usage_reset() { echo "Usage: g reset <commit> [--keep]"; }
 usage_branch() {
   cat <<'USAGE'
 Usage:
@@ -82,7 +82,7 @@ case "$cmd" in
       commit) usage_commit ;;
       amend) usage_amend ;;
       undo) usage_undo ;;
-      move) usage_move ;;
+      reset) usage_reset ;;
       branch) usage_branch ;;
       sync) usage_sync ;;
       init) usage_init ;;
@@ -148,8 +148,8 @@ case "$cmd" in
     esac
     ;;
 
-  move)
-    if [[ $# -lt 1 ]]; then usage_move; exit 2; fi
+  reset)
+    if [[ $# -lt 1 ]]; then usage_reset; exit 2; fi
     target="$1"
     shift || true
     if [[ "${1:-}" == "--keep" ]]; then
@@ -157,7 +157,7 @@ case "$cmd" in
     elif [[ $# -eq 0 ]]; then
       git reset --hard "$target"
     else
-      usage_move; exit 2
+      usage_reset; exit 2
     fi
     ;;
 

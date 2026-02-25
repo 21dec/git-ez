@@ -41,12 +41,12 @@ g help [command]
 - `g amend`
 - `g amend --no-edit`
 
-### Undo and Move
+### Undo and Reset
 
 - `g undo file <file>` (restore file from `HEAD`)
 - `g undo commit` (revert `HEAD` with a new commit)
-- `g move <commit>` (hard reset to commit)
-- `g move <commit> --keep` (mixed reset to commit, keeps working tree, clears staging)
+- `g reset <commit>` (hard reset to commit)
+- `g reset <commit> --keep` (mixed reset to commit, keeps working tree, clears staging)
 
 ### Branch
 
