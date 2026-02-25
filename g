@@ -105,9 +105,9 @@ case "$cmd" in
   diff)
     if [[ $# -gt 1 ]]; then usage_diff; exit 2; fi
     if [[ $# -eq 1 ]]; then
-      git diff HEAD -- "$1"
+    git --no-pager diff HEAD -- "$1"
     else
-      git diff HEAD
+      git --no-pager diff HEAD
     fi
     ;;
 
@@ -166,7 +166,7 @@ case "$cmd" in
     shift || true
     case "$sub" in
       list)
-        git branch
+        git --no-pager branch
         ;;
       new)
         [[ $# -eq 1 ]] || { usage_branch; exit 2; }
@@ -245,7 +245,7 @@ case "$cmd" in
     if [[ $oneline -eq 1 ]]; then args+=(--oneline); fi
     if [[ $graph -eq 1 ]]; then args+=(--graph --decorate); fi
     if [[ -n "$file" ]]; then args+=(-- "$file"); fi
-    git log "${args[@]}"
+    git --no-pager log "${args[@]}"
     ;;
 
   *)
