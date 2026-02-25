@@ -27,18 +27,12 @@ source ~/.zshrc
 g help [command]
 ```
 
-### State
+### Status
 
-- `g state`
-- `g state --short`
+- `g status` (short, default)
+- `g status --long`
 - `g diff` (always compares against `HEAD`)
-
-### Staging
-
-- `g stage <file>`
-- `g stage --all`
-- `g unstage <file>`
-- `g unstage --all`
+- `g diff <file>` (file-only diff against `HEAD`)
 
 ### Commit
 
